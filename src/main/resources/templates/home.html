@@ -25,6 +25,7 @@
     </script>
     <!-- My css -->
     <link rel="stylesheet" th:href="@{css/home.css}"/>
+    <link rel="image" th:href="@{/image}"/>
     <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.css">
 </head>
 <body>
@@ -165,17 +166,21 @@
                 <div class="scroller like-icon" style="height:  700px; ">
                     <span th:each="post : ${posts}" >
                         <div style="border: 3px solid white; border-radius: 50px; box-shadow: 0px 0px 5px #1002ad; margin-bottom: 10px; margin-top: 30px; margin-left: 20px">
-                            <div class="linear" style="background-color: rgba(255,255,255,0)">
+                            <div class="linear" style="background-color: rgba(7,7,7,0)">
                                 <div class="linear" style="background-color: rgba(255,255,255,0)">
-                                    <div class="titleText" style="color: black; padding: 10px; margin-top: 10px; background-color: rgba(255,255,255,0); border-radius: 100px">
-                                        <h5 class="tittle"><p th:text="${post.getTitle()}"></p></h5>
+                                    <div class="titleText" style="color: rgba(255,255,255,0); padding: 10px; margin-top: 10px; background-color: rgba(255,255,255,0); border-radius: 100px">
+                                        <h5 class="tittle" style="color: black"><p th:text="${post.getTitle()}"></p></h5>
                                         <p style="color: #000; padding: 10px;">
                                             <span style="font-weight: bold; font-size: 1.1em;">Author:</span>
                                             <span style="color:#000;" th:text="${post.getName()}"></span></p>
-                                        <div th:if="${post.getImageName() != '/image/'}"> <img style="border: 3px solid white;
-                                        border-radius: 50px; box-shadow: 0px 0px 3px #1002ad" th:src="@{${post.getImageName()}}" th:href="@{${post.getImageName()}}" class="majorpix" alt="My Image" /></div>
-                                        <div th:if="${post.getImageName() == '/image/'}"> <img style="display: none; border: 3px solid white;
-                                        border-radius: 50px; box-shadow: 0px 0px 3px #1002ad" th:src="@{${post.getImageName()}}" class="majorpix" alt=""  /></div>
+                                        <div th:if="${post.getImageName() != 'image/'}">
+                                            <img style="border: 3px solid white; border-radius: 50px;
+                                            box-shadow: 0px 0px 3px #1002ad" th:src="@{${post.getImageName()}}"
+                                                 th:href="@{${post.getImageName()}}" class="majorpix" alt="My Image" /></div>
+                                        <div th:if="${post.getImageName() == 'image/'}">
+                                            <img style="display: none; border: 3px solid white;
+                                            border-radius: 50px; box-shadow: 0px 0px 3px #1002ad"
+                                                 th:src="@{${post.getImageName()}}" class="majorpix" alt=""  /></div>
                                     </div>
                                 </div>
                                 <div style="color:#000; margin-left: 20px; margin-right: 20px; margin-top: 8px; border: 2px solid white; border-radius: 50px; box-shadow: 0px 0px 5px #1002ad" class="body">

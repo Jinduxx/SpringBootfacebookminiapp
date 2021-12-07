@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 @Controller
 public class LikeController {
+
     @Autowired
     LikeServiceImpl likeService;
 

@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface CommentService {
     boolean createComment(Long userId, Long postId, Comment comment);
-    public List<CommentDetails> getComments(Long postId);
+    List<CommentDetails> getComments(Long postId);
     boolean editComment(Long commentId, User user, Long postId, String comment);
     boolean deleteComment(Long commentId);
 }

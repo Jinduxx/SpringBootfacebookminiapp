@@ -90,7 +90,7 @@ public class PostServiceImpl implements PostService {
                 post.setId(postEach.getPostId());
                 post.setTitle(postEach.getTitle());
                 post.setBody(postEach.getBody());
-                post.setImageName("/image/"+postEach.getImageName());
+                post.setImageName("image/"+postEach.getImageName());
                 post.setName(postEach.getUser().getLastname()+ " "+ postEach.getUser().getFirstname());
 
                 //the total number of likes on this particular post
@@ -121,13 +121,12 @@ public class PostServiceImpl implements PostService {
 
     /**
      * CREATE operation on Comment
-     * @param user
      * @param postId
      * @param title
      * @param body
      * @return boolean(true for successful update and false on failure on post)
      * */
-    public boolean editPost(User user, Long postId, String title, String body) {
+    public boolean editPost(Long postId, String title, String body) {
         boolean status = false;
 
         try {

@@ -42,7 +42,7 @@ function like(postId, userId){
 
         console.log("decrement");
         const valid = document.getElementsByClassName("thumb");
-        document.getElementById(postId).style.color = "#ffffff";
+        document.getElementById(postId).style.color = "#0e0000";
 
         for (let i = 0; i < valid.length; i++) {
             let newId = valid[i].innerHTML.split(" ")[0];

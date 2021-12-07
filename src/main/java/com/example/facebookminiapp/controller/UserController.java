@@ -9,6 +9,7 @@ import com.example.facebookminiapp.service.serviceImplementation.UserServiceImpl
 import com.example.facebookminiapp.service.serviceImplementation.PostServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -69,29 +70,29 @@ public class UserController {
      * renders the home page
      * */
     @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public ModelAndView showHome(HttpServletRequest request) {
+    public String showHome(HttpServletRequest request, Model model) {
 
         HttpSession httpSession = request.getSession();
         User user = (User) httpSession.getAttribute("user");
 
         if(user == null) {
-            ModelAndView mav = new ModelAndView("index");
-            mav.addObject("user1", new User());
-            mav.addObject("login", new LoginDetails());
+//            ModelAndView mav = new ModelAndView("index");
+            model.addAttribute("user1", new User());
+            model.addAttribute("login", new LoginDetails());
             httpSession.setAttribute("messagee", "!!!Please Login");
-            return mav;
+            return "index";
         }
 
         List<PostDetails> post = postService.getPost(user);
-        ModelAndView mav = new ModelAndView("home");
+//        ModelAndView mav = new ModelAndView("home");
 
-        mav.addObject("user", user);
-        mav.addObject("posts", post);
+        model.addAttribute("user", user);
+        model.addAttribute("posts", post);
 
-        mav.addObject("post", new Post());
-        mav.addObject("commentData", new Comment());
+        model.addAttribute("post", new Post());
+        model.addAttribute("commentData", new Comment());
 
-        return mav;
+        return "home";
     }
 
     /**

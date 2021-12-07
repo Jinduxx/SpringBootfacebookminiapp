@@ -37,13 +37,14 @@ public class PostController {
      * redirects back to home
      * */
     @RequestMapping(value = "/postProcessing", method = RequestMethod.POST)
-    public String addUser(HttpServletRequest request, @ModelAttribute("post") Post post, HttpSession session) {
-
-        User user = (User) session.getAttribute("user");
-
-        if(user == null) return "redirect:/";
-
+    public String addPost(HttpServletRequest request, @ModelAttribute("post") Post post, HttpSession session) {
         try {
+
+            User user = (User) session.getAttribute("user");
+
+            if(user == null){
+                return "redirect:/";
+            }
 
             Part part = request.getPart("file");
 
@@ -65,9 +66,9 @@ public class PostController {
             else
                 session.setAttribute("message", "Error uploading image to database");
 
-        } catch (IOException | ServletException e) {
-            e.printStackTrace();
-        }
+            } catch (IOException | ServletException e) {
+                e.printStackTrace();
+            }
 
         return "redirect:/home";
     }
@@ -78,7 +79,7 @@ public class PostController {
      * renders the the edit page
      * */
     @RequestMapping(value = "/edit/{post}", method = RequestMethod.GET)
-    public String editComment(@PathVariable("post") Long post_id, Model model, HttpSession session) {
+    public String showPost(@PathVariable("post") Long post_id, Model model, HttpSession session) {
 
         User user = (User) session.getAttribute("user");
 
@@ -101,13 +102,13 @@ public class PostController {
      * redirects back to home page
      * */
     @RequestMapping(value = "/editProcessing", method = RequestMethod.POST)
-    public String addUser(HttpSession session, @ModelAttribute("post") Post post) {
+    public String editPost(HttpSession session, @ModelAttribute("post") Post post) {
 
         User user = (User) session.getAttribute("user");
 
         if(user == null) return "redirect:/";
 
-        if(postService.editPost(user,post.getPostId(),post.getTitle(),post.getBody())) {
+        if(postService.editPost(post.getPostId(),post.getTitle(),post.getBody())) {
             session.setAttribute("message", "Post edited successfully");
         }else{
             session.setAttribute("message", "Error editing post!");
@@ -118,7 +119,7 @@ public class PostController {
 
 //   to delete post
     @RequestMapping(value = "/deletePost", method = RequestMethod.POST)
-    public String deleteComment(HttpServletRequest request, HttpSession session) {
+    public String deletePost(HttpServletRequest request, HttpSession session) {
 
         User user = (User) session.getAttribute("user");
 

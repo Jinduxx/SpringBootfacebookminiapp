@@ -65,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
                 comment.setComment(commentEach.getComment());
                 comment.setUsername(commentEach.getUser().getLastname()+" "+commentEach.getUser().getFirstname());
                 comment.setTitle(commentEach.getPost().getTitle());
-                comment.setImageName("/image/"+commentEach.getPost().getImageName());
+                comment.setImageName("/image/" +commentEach.getPost().getImageName());
                 comment.setUserId(commentEach.getUser().getId());
 
                 comments.add(comment);
