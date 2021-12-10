@@ -4,8 +4,8 @@ import com.example.facebookminiapp.otherModel.CommentDetails;
 import com.example.facebookminiapp.model.Comment;
 import com.example.facebookminiapp.model.Post;
 import com.example.facebookminiapp.model.User;
-import com.example.facebookminiapp.repository.CommentRepository;
-import com.example.facebookminiapp.repository.PostRepository;
+import com.example.facebookminiapp.repo.CommentRepo;
+import com.example.facebookminiapp.repo.PostRepo;
 import com.example.facebookminiapp.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
 
     @Autowired
-    private CommentRepository commentRepository;
+    private CommentRepo commentRepo;
     @Autowired
-    private PostRepository postRepository;
+    private PostRepo postRepo;
 
     /**
       * CREATE operation on Comment
@@ -32,11 +32,11 @@ public class CommentServiceImpl implements CommentService {
         boolean result = false;
 
         try{
-            Post post = postRepository.findById(postId).get();
+            Post post = postRepo.findById(postId).get();
             //set the post
             comment.setPost(post);
 
-            commentRepository.save(comment);
+            commentRepo.save(comment);
             result = true;
 
         }catch (Exception e){
@@ -56,7 +56,7 @@ public class CommentServiceImpl implements CommentService {
 
         try{
 
-            List<Comment> commentsData = commentRepository.findAllByPostPostId(postId);
+            List<Comment> commentsData = commentRepo.findAllByPostPostId(postId);
 
             for (Comment commentEach:commentsData) {
                 CommentDetails comment = new CommentDetails();
@@ -90,14 +90,14 @@ public class CommentServiceImpl implements CommentService {
         boolean status = false;
 
         try {
-            Post post = postRepository.findById(postId).get();
+            Post post = postRepo.findById(postId).get();
 
-            Comment data = commentRepository.findCommentById(commentId);
+            Comment data = commentRepo.findCommentById(commentId);
 
             data.setComment(comment);
             data.setUser(user);
             data.setPost(post);
-            commentRepository.save(data);
+            commentRepo.save(data);
 
             status = true;
 
@@ -117,7 +117,7 @@ public class CommentServiceImpl implements CommentService {
         boolean status =  false;
 
         try {
-            commentRepository.deleteCommentById(commentId);
+            commentRepo.deleteCommentById(commentId);
             status = true;
         } catch (Exception e) {
             e.printStackTrace();

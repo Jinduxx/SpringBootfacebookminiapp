@@ -1,4 +1,4 @@
-package com.example.facebookminiapp.repository;
+package com.example.facebookminiapp.repo;
 
 import com.example.facebookminiapp.model.Likes;
 import com.example.facebookminiapp.model.Post;
@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface LikesRepository extends JpaRepository<Likes, Long> {
+public interface LikesRepo extends JpaRepository<Likes, Long> {
     List<Likes> findAllByPostPostId(Long postId);
     List<Likes> findAllByPostPostIdAndUserId(Long postId, Long personId);
     @Transactional

@@ -36,10 +36,10 @@ public class User {
     @Column(name = "gender", nullable = false, columnDefinition = "VARCHAR(45)")
     private String gender;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> post;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     @OneToOne(mappedBy = "user")

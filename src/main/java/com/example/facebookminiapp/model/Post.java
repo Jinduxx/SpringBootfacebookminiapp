@@ -26,14 +26,11 @@ public class Post {
     @Column(name = "imageName", nullable = false, columnDefinition = "VARCHAR(45)")
     private String imageName;
 
-    @Column(name = "checker", nullable = false, columnDefinition = "VARCHAR(45)")
-    private String checker;
-
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "userId", referencedColumnName = "id")
     private User user;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private List<Comment> comments;
 
     @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)

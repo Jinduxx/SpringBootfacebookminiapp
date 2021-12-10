@@ -3,8 +3,8 @@ package com.example.facebookminiapp.service.serviceImplementation;
 import com.example.facebookminiapp.model.Likes;
 import com.example.facebookminiapp.model.Post;
 import com.example.facebookminiapp.model.User;
-import com.example.facebookminiapp.repository.LikesRepository;
-import com.example.facebookminiapp.repository.PostRepository;
+import com.example.facebookminiapp.repo.LikesRepo;
+import com.example.facebookminiapp.repo.PostRepo;
 import com.example.facebookminiapp.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 public class LikeServiceImpl implements LikeService {
 
     @Autowired
-    private LikesRepository likesRepository;
+    private LikesRepo likesRepo;
     @Autowired
-    private PostRepository postRepository;
+    private PostRepo postRepo;
 
     /**
      * CREATE operation on Comment
@@ -26,7 +26,7 @@ public class LikeServiceImpl implements LikeService {
     public boolean likePost(User user, Long postId, String action){
         boolean result = false;
 
-        Post post = postRepository.findById(postId).get();
+        Post post = postRepo.findById(postId).get();
 
         try{
             Likes like = new Likes();
@@ -34,10 +34,10 @@ public class LikeServiceImpl implements LikeService {
             like.setPost(post);
 
             if(action.equals("1")){
-                likesRepository.save(like);
+                likesRepo.save(like);
                 System.out.println("save");
             }else{
-                likesRepository.deleteLikesByPostAndUser(post, user);
+                likesRepo.deleteLikesByPostAndUser(post, user);
                 System.out.println("delete");
             }
 

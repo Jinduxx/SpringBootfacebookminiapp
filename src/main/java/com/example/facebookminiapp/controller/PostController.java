@@ -64,7 +64,7 @@ public class PostController {
             if(postService.createPost(user.getId(), post))
                 session.setAttribute("message", "File uploaded successfully");
             else
-                session.setAttribute("message", "Error uploading image to database");
+                session.setAttribute("message", "Error uploading post to database");
 
             } catch (IOException | ServletException e) {
                 e.printStackTrace();
@@ -85,12 +85,11 @@ public class PostController {
 
         if(user == null) return "redirect:/";
 
-        Long postId = post_id;
-
-        List<Post> post = postService.getPostById(postId);
+        List<Post> post = postService.getPostById(post_id);
 
         model.addAttribute("postData", post.get(0));
         model.addAttribute("user", user);
+
 
         return "edit";
     }
@@ -152,6 +151,7 @@ public class PostController {
             fops.flush();
             fops.close();
         }catch(Exception e){
+            System.out.println("Don't worry its not affecting your app");
             e.printStackTrace();
         }
 

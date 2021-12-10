@@ -175,7 +175,7 @@
                                             <span style="color:#000;" th:text="${post.getName()}"></span></p>
                                         <div th:if="${post.getImageName() != 'image/'}">
                                             <img style="border: 3px solid white; border-radius: 50px;
-                                            box-shadow: 0px 0px 3px #1002ad" th:src="@{${post.getImageName()}}"
+                                            box-shadow: 0px 0px 3px #1002ad" th:src= "@{${post.getImageName()}}"
                                                  th:href="@{${post.getImageName()}}" class="majorpix" alt="My Image" /></div>
                                         <div th:if="${post.getImageName() == 'image/'}">
                                             <img style="display: none; border: 3px solid white;
