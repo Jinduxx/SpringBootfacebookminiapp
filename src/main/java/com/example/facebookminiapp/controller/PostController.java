@@ -26,8 +26,13 @@ import java.util.List;
 @MultipartConfig
 public class PostController {
 
-    @Autowired
+
     PostServiceImpl postService;
+
+    @Autowired
+    public PostController(PostServiceImpl postService) {
+        this.postService = postService;
+    }
 
     /**
      * Post request to process posts made by users
@@ -142,7 +147,6 @@ public class PostController {
      * @param path
      */
     public void uploadFile(InputStream in, String path){
-
         try{
             byte[] byt = new byte[in.available()];
             in.read(byt);

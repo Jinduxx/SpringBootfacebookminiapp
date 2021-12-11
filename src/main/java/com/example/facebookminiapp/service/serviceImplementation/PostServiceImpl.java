@@ -14,20 +14,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService {
 
-    @Autowired
     PostRepo postRepo;
-    @Autowired
     LikesRepo likesRepo;
-    @Autowired
     CommentRepo commentRepo;
-    @Autowired
     UserRepo userRepo;
+
+    @Autowired
+    public PostServiceImpl(PostRepo postRepo, LikesRepo likesRepo, CommentRepo commentRepo, UserRepo userRepo) {
+        this.postRepo = postRepo;
+        this.likesRepo = likesRepo;
+        this.commentRepo = commentRepo;
+        this.userRepo = userRepo;
+    }
 
     /**
      * CREATE operation on Post
@@ -37,18 +42,11 @@ public class PostServiceImpl implements PostService {
      * */
     public boolean createPost(Long userId, Post post) {
         boolean result = false;
-
-        try {
-            Optional<User> user = userRepo.findById(userId);
-            if(user.isPresent()){
-                postRepo.save(post);
-                result = true;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        Optional<User> user = userRepo.findById(userId);
+        if(user.isPresent()){
+            postRepo.save(post);
+            result = true;
         }
-
         return result;
     }
 
@@ -60,14 +58,8 @@ public class PostServiceImpl implements PostService {
      * @return boolean(true for successful creation and false on failure to create)
      * */
     public List<Post> getPostById(Long postId){
-        List<Post> postList = new ArrayList<>();
-
-        try{
-            postList= postRepo.findPostByPostId(postId);
-        }catch(Exception e){
-            System.out.println("Something went wrong1 "+e.getMessage());
-        }
-
+        List<Post> postList;
+        postList= postRepo.findPostByPostId(postId);
         return postList;
     }
 
@@ -78,42 +70,37 @@ public class PostServiceImpl implements PostService {
      * */
     public List<PostDetails> getPost(User currentUser) {
         List<PostDetails> posts = new ArrayList<>();
+        //get all posts
+        List<Post> postData = postRepo.findAllByPostIdIsNotNull();
 
-        try {
-            //get all posts
-            List<Post> postData = postRepo.findAllByPostIdIsNotNull();
+        for (Post postEach:postData) {
 
-            for (Post postEach:postData) {
+            PostDetails post = new PostDetails();
+            post.setId(postEach.getPostId());
+            post.setTitle(postEach.getTitle());
+            post.setBody(postEach.getBody());
+            post.setImageName("image/"+postEach.getImageName());
+            post.setName(postEach.getUser().getLastname()+ " "+ postEach.getUser().getFirstname());
 
-                PostDetails post = new PostDetails();
-                post.setId(postEach.getPostId());
-                post.setTitle(postEach.getTitle());
-                post.setBody(postEach.getBody());
-                post.setImageName("image/"+postEach.getImageName());
-                post.setName(postEach.getUser().getLastname()+ " "+ postEach.getUser().getFirstname());
+            //the total number of likes on this particular post
+            List<Likes> numberOfLikes = likesRepo.findAllByPostPostId(postEach.getPostId());
+            int likeCount = numberOfLikes.size();
+            post.setNoLikes(likeCount);
 
-                //the total number of likes on this particular post
-                List<Likes> numberOfLikes = likesRepo.findAllByPostPostId(postEach.getPostId());
-                int likeCount = numberOfLikes.size();
-                post.setNoLikes(likeCount);
+            //the total number of comments on this particular post
+            List<Comment> noOfComment = commentRepo.findAllByPostPostId(postEach.getPostId());
+            int commentCount = noOfComment.size();
+            post.setNoComments(commentCount);
 
-                //the total number of comments on this particular post
-                List<Comment> noOfComment = commentRepo.findAllByPostPostId(postEach.getPostId());
-                int commentCount = noOfComment.size();
-                post.setNoComments(commentCount);
-
-                //return true if current user liked this post, else false
-                List<Likes> postLiked = likesRepo.findAllByPostPostIdAndUserId(postEach.getPostId(), currentUser.getId());
-                if(postLiked.size() > 0){
-                    post.setLikedPost(true);
-                }
-
-                posts.add(post);
+            //return true if current user liked this post, else false
+            List<Likes> postLiked = likesRepo.findAllByPostPostIdAndUserId(postEach.getPostId(), currentUser.getId());
+            if(postLiked.size() > 0){
+                post.setLikedPost(true);
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            posts.add(post);
         }
+        Collections.reverse(posts);
 
         return posts;
     }
@@ -127,17 +114,12 @@ public class PostServiceImpl implements PostService {
      * */
     public boolean editPost(Long postId, String title, String body) {
         boolean status = false;
-
-        try {
-            Post post = postRepo.findById(postId).get();
-            post.setTitle(title);
-            post.setBody(body);
-            postRepo.save(post);
-
+        Optional<Post> post = postRepo.findById(postId);
+        if(post.isPresent()){
+            post.get().setTitle(title);
+            post.get().setBody(body);
+            postRepo.save(post.get());
             status = true;
-
-        }catch (Exception e) {
-            e.printStackTrace();
         }
 
         return status;
@@ -151,19 +133,10 @@ public class PostServiceImpl implements PostService {
      * */
     public boolean deletePost(Long postId, Long personId){
         boolean status =  false;
-
-        try {
-
-            Post post = postRepo.findPostByPostIdAndUserId(postId, personId);
-
-            if(post != null){
-//                post.setChecker("INACTIVE");
-//                postRepository.save(post);
-                postRepo.deletePostByPostIdAndUserId(postId,personId);
-                status = true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        Post post = postRepo.findPostByPostIdAndUserId(postId, personId);
+        if(post != null){
+            postRepo.deletePostByPostIdAndUserId(postId,personId);
+            status = true;
         }
         return status;
     }

@@ -23,9 +23,8 @@ public class UserServiceImpl implements UserService {
      * @return boolean(true for successful creation and false on failure to create)
      * */
     public boolean createUser(User user){
-        boolean flag = false;
+        boolean flag;
 
-        try {
             //password encryption
             user.setPassword(PasswordHashing.encryptPassword(user.getPassword()));
 
@@ -36,11 +35,6 @@ public class UserServiceImpl implements UserService {
                 userRepo.save(user);
                 flag = true;
             } else flag = false;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         return  flag;
     }
 
@@ -52,36 +46,23 @@ public class UserServiceImpl implements UserService {
      * */
     public User getUser(String email, String password){
 
-        User userData = null;
-
-        try {
-
+        User userData;
             userData = userRepo.findPersonByEmail(email);
 
             if(!password.equals(PasswordHashing.decryptPassword(userData.getPassword()))){
                 userData = null;
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         return userData;
     }
 
 
     public boolean deleteUser(String email){
         boolean status =  false;
+        User user  = userRepo.findPersonByEmail(email);
 
-        try {
-                User user  = userRepo.findPersonByEmail(email);
-
-            if(user != null){
-                userRepo.deleteUserByEmail(email);
-                status = true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(user != null){
+            userRepo.deleteUserByEmail(email);
+            status = true;
         }
         return status;
     }

@@ -8,13 +8,20 @@ import com.example.facebookminiapp.repo.PostRepo;
 import com.example.facebookminiapp.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
 @Service
 public class LikeServiceImpl implements LikeService {
 
-    @Autowired
     private LikesRepo likesRepo;
-    @Autowired
     private PostRepo postRepo;
+
+    @Autowired
+    public LikeServiceImpl(LikesRepo likesRepo, PostRepo postRepo) {
+        this.likesRepo = likesRepo;
+        this.postRepo = postRepo;
+    }
 
     /**
      * CREATE operation on Comment
@@ -26,24 +33,20 @@ public class LikeServiceImpl implements LikeService {
     public boolean likePost(User user, Long postId, String action){
         boolean result = false;
 
-        Post post = postRepo.findById(postId).get();
-
-        try{
+        Optional<Post> post = postRepo.findById(postId);
+        if(post.isPresent()){
             Likes like = new Likes();
             like.setUser(user);
-            like.setPost(post);
+            like.setPost(post.get());
 
             if(action.equals("1")){
                 likesRepo.save(like);
                 System.out.println("save");
             }else{
-                likesRepo.deleteLikesByPostAndUser(post, user);
+                likesRepo.deleteLikesByPostAndUser(post.get(), user);
                 System.out.println("delete");
             }
-
             result = true;
-        }catch (Exception e){
-            e.printStackTrace();
         }
 
         return result;

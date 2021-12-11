@@ -24,11 +24,15 @@ import java.util.regex.Pattern;
 @Controller
 public class UserController {
 
-    @Autowired
     private UserServiceImpl userService;
 
-    @Autowired
     private PostServiceImpl postService;
+
+    @Autowired
+    public UserController(UserServiceImpl userService, PostServiceImpl postService) {
+        this.userService = userService;
+        this.postService = postService;
+    }
 
     /**
      * Get request to get the login and sign up page

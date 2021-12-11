@@ -16,10 +16,14 @@ import java.util.List;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    @Autowired
     private CommentRepo commentRepo;
-    @Autowired
     private PostRepo postRepo;
+
+    @Autowired
+    public CommentServiceImpl(CommentRepo commentRepo, PostRepo postRepo) {
+        this.commentRepo = commentRepo;
+        this.postRepo = postRepo;
+    }
 
     /**
       * CREATE operation on Comment
@@ -115,12 +119,9 @@ public class CommentServiceImpl implements CommentService {
      * */
     public boolean deleteComment(Long commentId){
         boolean status =  false;
-
-        try {
-            commentRepo.deleteCommentById(commentId);
+        Comment com = commentRepo.deleteCommentById(commentId);
+        if(com != null){
             status = true;
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return status;
     }

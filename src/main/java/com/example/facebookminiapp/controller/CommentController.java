@@ -16,8 +16,14 @@ import java.util.List;
 @Controller
 public class CommentController {
 
-    @Autowired
+
     private CommentServiceImpl commentService;
+
+    @Autowired
+    public CommentController(CommentServiceImpl commentService) {
+        this.commentService = commentService;
+    }
+
 
     /**
      * Post request to process comment made by users

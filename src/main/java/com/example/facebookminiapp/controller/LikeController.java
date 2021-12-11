@@ -14,8 +14,13 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class LikeController {
 
-    @Autowired
+
     LikeService likeService;
+
+    @Autowired
+    public LikeController(LikeService likeService) {
+        this.likeService = likeService;
+    }
 
     /**
      * Post request to process like made by users
